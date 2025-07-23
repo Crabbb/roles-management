@@ -1,142 +1,196 @@
-# Skills and structure validation script
-# Author: Validation System
-# Date: 2024-01-15
+# Скрипт валидации декомпозиции навыков аналитиков
+# Проверяет корректность и полноту документации
 
-Write-Host "Starting skills and structure validation..." -ForegroundColor Green
+Write-Host "=== ВАЛИДАЦИЯ ДЕКОМПОЗИЦИИ НАВЫКОВ АНАЛИТИКОВ ===" -ForegroundColor Green
+Write-Host ""
 
-# Test 1: Level coverage check
-Write-Host "`nTest 1: Level coverage check" -ForegroundColor Yellow
+# Проверка существования файлов
+$sourceFile = "source/Business_Analyst_Custdev_Analyst_Description.markdown"
+$unifiedFile = "decomposed/business-custdev-analyst-skills-unified.md"
+$tableFile = "decomposed/business-custdev-analyst-skills-unified-table.md"
+$csvFile = "decomposed/business-custdev-analyst-skills-unified-export.csv"
 
-$levels = @("L1", "L2", "L3", "L4", "L5", "L6", "L7", "L8", "L9", "L10", "L11")
-$levelNames = @("Junior", "Junior", "Junior", "Middle", "Middle", "Middle", "Senior", "Senior", "Senior", "Architect", "Architect")
+$files = @($sourceFile, $unifiedFile, $tableFile, $csvFile)
+$allFilesExist = $true
 
-Write-Host "Checking all 11 levels:" -ForegroundColor Green
-for ($i = 0; $i -lt $levels.Length; $i++) {
-    Write-Host "   $($levels[$i]) ($($levelNames[$i]))" -ForegroundColor Cyan
+Write-Host "Проверка существования файлов:" -ForegroundColor Yellow
+foreach ($file in $files) {
+    if (Test-Path $file) {
+        Write-Host "OK $file" -ForegroundColor Green
+    } else {
+        Write-Host "ERROR $file - НЕ НАЙДЕН" -ForegroundColor Red
+        $allFilesExist = $false
+    }
 }
 
-# Test 2: Skills progression check
-Write-Host "`nTest 2: Skills progression check" -ForegroundColor Yellow
+if (-not $allFilesExist) {
+    Write-Host ""
+    Write-Host "ОШИБКА: Не все необходимые файлы найдены!" -ForegroundColor Red
+    exit 1
+}
 
-$juniorSkills = @("Task solving", "Tools learning", "Git usage", "Code standards", "Task planning")
-$middleSkills = @("Problem decomposition", "Code review", "Mentoring", "Code review", "BA interaction", "Refactoring")
-$seniorSkills = @("Project management", "Optimization", "Environment setup", "Dev roadmap", "Technical leadership", "Process setup")
-$architectSkills = @("Architecture design", "Pattern selection", "DevSecOps", "Technical strategy", "Innovation", "Scaling")
+Write-Host ""
+Write-Host "Проверка структуры файлов:" -ForegroundColor Yellow
 
-Write-Host "Junior (L1-L3): $($juniorSkills.Count) skills" -ForegroundColor Green
-Write-Host "Middle (L4-L6): $($middleSkills.Count) skills" -ForegroundColor Green
-Write-Host "Senior (L7-L9): $($seniorSkills.Count) skills" -ForegroundColor Green
-Write-Host "Architect (L10-L11): $($architectSkills.Count) skills" -ForegroundColor Green
-
-# Test 3: Skills uniqueness check
-Write-Host "`nTest 3: Skills uniqueness check" -ForegroundColor Yellow
-
-$allSkills = $juniorSkills + $middleSkills + $seniorSkills + $architectSkills
-$uniqueSkills = $allSkills | Sort-Object | Get-Unique
-
-Write-Host "Total skills: $($allSkills.Count)" -ForegroundColor Green
-Write-Host "Unique skills: $($uniqueSkills.Count)" -ForegroundColor Green
-
-if ($allSkills.Count -eq $uniqueSkills.Count) {
-    Write-Host "No skill duplications found" -ForegroundColor Green
+# Проверка исходного файла
+Write-Host "Проверка исходного файла..." -ForegroundColor Cyan
+$sourceContent = Get-Content $sourceFile -Raw
+if ($sourceContent -match "# Бизнес-аналитик и Custdev-аналитик") {
+    Write-Host "OK Заголовок найден" -ForegroundColor Green
 } else {
-    Write-Host "Skill duplications detected!" -ForegroundColor Red
+    Write-Host "ERROR Заголовок не найден" -ForegroundColor Red
 }
 
-# Test 4: Matrix completeness check
-Write-Host "`nTest 4: Matrix completeness check" -ForegroundColor Yellow
-
-$matrixSkills = @(
-    "Task solving",
-    "Tools learning", 
-    "Git usage",
-    "Code standards",
-    "Task planning",
-    "Problem decomposition",
-    "Project management",
-    "Technical leadership",
-    "Code review",
-    "Mentoring",
-    "Code review",
-    "BA interaction",
-    "Refactoring",
-    "Optimization",
-    "Environment setup",
-    "Dev roadmap",
-    "Technical leadership",
-    "Process setup",
-    "Architecture design",
-    "Pattern selection",
-    "DevSecOps",
-    "Technical strategy",
-    "Innovation",
-    "Scaling"
+# Проверка уровней в исходном файле
+$levels = @(
+    "Начинающий бизнес-аналитик",
+    "Младший бизнес-аналитик", 
+    "Старший бизнес-аналитик",
+    "Продвинутый бизнес-аналитик",
+    "Ведущий бизнес-аналитик",
+    "Эксперт бизнес-аналитик",
+    "Техлид бизнес-аналитиков",
+    "Начинающий Custdev-аналитик",
+    "Младший Custdev-аналитик",
+    "Старший Custdev-аналитик", 
+    "Продвинутый Custdev-аналитик",
+    "Ведущий Custdev-аналитик",
+    "Эксперт Custdev-аналитик",
+    "Техлид Custdev-аналитиков"
 )
 
-Write-Host "Skills in matrix: $($matrixSkills.Count)" -ForegroundColor Green
-Write-Host "All skills included in matrix" -ForegroundColor Green
-
-# Test 5: Development logic check
-Write-Host "`nTest 5: Development logic check" -ForegroundColor Yellow
-
-Write-Host "L1-L3: Focus on task execution" -ForegroundColor Green
-Write-Host "L4-L6: Focus on team collaboration" -ForegroundColor Green
-Write-Host "L7-L9: Focus on management and leadership" -ForegroundColor Green
-Write-Host "L10-L11: Focus on architecture and strategy" -ForegroundColor Green
-
-# Final statistics
-Write-Host "`nFINAL STATISTICS" -ForegroundColor Magenta
-Write-Host "================================" -ForegroundColor Magenta
-Write-Host "Levels: $($levels.Count)" -ForegroundColor White
-Write-Host "Skills: $($matrixSkills.Count)" -ForegroundColor White
-Write-Host "Uniqueness: 100%" -ForegroundColor White
-Write-Host "Level coverage: 100%" -ForegroundColor White
-
-# Test 6: Document structure check
-Write-Host "`nTest 6: Document structure check" -ForegroundColor Yellow
-
-$requiredSections = @(
-    "Principle of unification",
-    "Unified skills", 
-    "Skills matrix"
-)
-
-Write-Host "Checking required document sections:" -ForegroundColor Green
-foreach ($section in $requiredSections) {
-    Write-Host "   $section" -ForegroundColor Cyan
+Write-Host "Проверка уровней в исходном файле:" -ForegroundColor Cyan
+$allLevelsFound = $true
+foreach ($level in $levels) {
+    if ($sourceContent -match $level) {
+        Write-Host "OK $level" -ForegroundColor Green
+    } else {
+        Write-Host "ERROR $level - НЕ НАЙДЕН" -ForegroundColor Red
+        $allLevelsFound = $false
+    }
 }
 
-# Test 7: Skills description format check
-Write-Host "`nTest 7: Skills description format check" -ForegroundColor Yellow
+# Проверка унифицированного файла
+Write-Host ""
+Write-Host "Проверка унифицированного файла..." -ForegroundColor Cyan
+$unifiedContent = Get-Content $unifiedFile -Raw
 
-$skillFormatChecks = @(
-    "Skills have clear names",
-    "Descriptions start with 'Ability'",
-    "Expected results are measurable",
-    "Context is described for each level",
-    "Competence level is specified"
-)
-
-Write-Host "Checking skills description format:" -ForegroundColor Green
-foreach ($check in $skillFormatChecks) {
-    Write-Host "   $check" -ForegroundColor Cyan
+if ($unifiedContent -match "Унифицированная декомпозиция навыков") {
+    Write-Host "OK Заголовок найден" -ForegroundColor Green
+} else {
+    Write-Host "ERROR Заголовок не найден" -ForegroundColor Red
 }
 
-# Test 8: Matrix format check
-Write-Host "`nTest 8: Matrix format check" -ForegroundColor Yellow
-
-$matrixFormatChecks = @(
-    "Headers with role names (Junior, Middle, Senior, Architect)",
-    "Correct symbols (✅, ❌, -)",
-    "All 11 levels represented",
-    "Logical skills sorting",
-    "Skills grouped by type"
-)
-
-Write-Host "Checking matrix format:" -ForegroundColor Green
-foreach ($check in $matrixFormatChecks) {
-    Write-Host "   $check" -ForegroundColor Cyan
+if ($unifiedContent -match "Метаданные") {
+    Write-Host "OK Секция метаданных найдена" -ForegroundColor Green
+} else {
+    Write-Host "ERROR Секция метаданных не найдена" -ForegroundColor Red
 }
 
-Write-Host "`nValidation completed successfully!" -ForegroundColor Green
-Write-Host "All skills and structure are correctly formatted" -ForegroundColor Green 
+if ($unifiedContent -match "Унифицированная матрица навыков") {
+    Write-Host "OK Матрица навыков найдена" -ForegroundColor Green
+} else {
+    Write-Host "ERROR Матрица навыков не найдена" -ForegroundColor Red
+}
+
+# Проверка табличного файла
+Write-Host ""
+Write-Host "Проверка табличного файла..." -ForegroundColor Cyan
+$tableContent = Get-Content $tableFile -Raw
+
+if ($tableContent -match "Табличная декомпозиция навыков") {
+    Write-Host "OK Заголовок найден" -ForegroundColor Green
+} else {
+    Write-Host "ERROR Заголовок не найден" -ForegroundColor Red
+}
+
+# Подсчет строк в таблице
+$tableLines = Get-Content $tableFile
+$dataLines = $tableLines | Where-Object { $_ -match "^\|.*\|.*\|.*\|.*\|$" }
+$dataLineCount = ($dataLines | Measure-Object).Count
+
+Write-Host "Количество строк с данными: $dataLineCount" -ForegroundColor Cyan
+
+# Проверка CSV файла
+Write-Host ""
+Write-Host "Проверка CSV файла..." -ForegroundColor Cyan
+$csvContent = Get-Content $csvFile
+$csvLineCount = ($csvContent | Measure-Object).Count
+
+Write-Host "Количество строк в CSV: $csvLineCount" -ForegroundColor Cyan
+
+if ($csvContent[0] -match "Роль,Уровень,Навык,Описание") {
+    Write-Host "OK Заголовки CSV корректны" -ForegroundColor Green
+} else {
+    Write-Host "ERROR Заголовки CSV некорректны" -ForegroundColor Red
+}
+
+# Проверка соответствия количества записей
+$expectedRoles = @("Бизнес-аналитик", "Custdev-аналитик")
+$expectedLevels = @("L1", "L2", "L3", "L4", "L5", "L6", "L7")
+
+Write-Host ""
+Write-Host "Проверка структуры данных:" -ForegroundColor Yellow
+
+foreach ($role in $expectedRoles) {
+    foreach ($level in $expectedLevels) {
+        $count = ($csvContent | Where-Object { $_ -match "$role,$level," } | Measure-Object).Count
+        if ($count -gt 0) {
+            Write-Host "OK $role $level: $count навыков" -ForegroundColor Green
+        } else {
+            Write-Host "WARNING $role $level: 0 навыков" -ForegroundColor Yellow
+        }
+    }
+}
+
+# Проверка уникальности навыков
+Write-Host ""
+Write-Host "Проверка уникальности навыков:" -ForegroundColor Yellow
+$skills = $csvContent | Select-Object -Skip 1 | ForEach-Object { ($_ -split ',')[2] }
+$uniqueSkills = $skills | Sort-Object | Get-Unique
+$totalSkills = ($skills | Measure-Object).Count
+$uniqueSkillsCount = ($uniqueSkills | Measure-Object).Count
+
+Write-Host "Всего навыков: $totalSkills" -ForegroundColor Cyan
+Write-Host "Уникальных навыков: $uniqueSkillsCount" -ForegroundColor Cyan
+
+if ($totalSkills -eq $uniqueSkillsCount) {
+    Write-Host "OK Все навыки уникальны" -ForegroundColor Green
+} else {
+    Write-Host "WARNING Обнаружены дублирующиеся навыки" -ForegroundColor Yellow
+}
+
+# Итоговая проверка
+Write-Host ""
+Write-Host "=== ИТОГОВАЯ ОЦЕНКА ===" -ForegroundColor Green
+
+$errors = 0
+$warnings = 0
+
+if (-not $allFilesExist) { $errors++ }
+if (-not $allLevelsFound) { $errors++ }
+if ($totalSkills -ne $uniqueSkillsCount) { $warnings++ }
+
+if ($errors -eq 0) {
+    Write-Host "OK ВАЛИДАЦИЯ ПРОЙДЕНА УСПЕШНО" -ForegroundColor Green
+    if ($warnings -gt 0) {
+        Write-Host "WARNING Обнаружено предупреждений: $warnings" -ForegroundColor Yellow
+    }
+} else {
+    Write-Host "ERROR ВАЛИДАЦИЯ НЕ ПРОЙДЕНА" -ForegroundColor Red
+    Write-Host "Ошибок: $errors" -ForegroundColor Red
+    if ($warnings -gt 0) {
+        Write-Host "Предупреждений: $warnings" -ForegroundColor Yellow
+    }
+}
+
+Write-Host ""
+Write-Host "Статистика:" -ForegroundColor Cyan
+Write-Host "- Всего ролей: $($expectedRoles.Count)" -ForegroundColor White
+Write-Host "- Всего уровней: $($expectedLevels.Count)" -ForegroundColor White
+Write-Host "- Всего навыков: $totalSkills" -ForegroundColor White
+Write-Host "- Уникальных навыков: $uniqueSkillsCount" -ForegroundColor White
+Write-Host "- Строк в CSV: $csvLineCount" -ForegroundColor White
+
+Write-Host ""
+Write-Host "Валидация завершена!" -ForegroundColor Green 
