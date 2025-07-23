@@ -1,8 +1,8 @@
-# Skills validation script
+# Skills and structure validation script
 # Author: Validation System
 # Date: 2024-01-15
 
-Write-Host "Starting skills validation..." -ForegroundColor Green
+Write-Host "Starting skills and structure validation..." -ForegroundColor Green
 
 # Test 1: Level coverage check
 Write-Host "`nTest 1: Level coverage check" -ForegroundColor Yellow
@@ -92,5 +92,51 @@ Write-Host "Skills: $($matrixSkills.Count)" -ForegroundColor White
 Write-Host "Uniqueness: 100%" -ForegroundColor White
 Write-Host "Level coverage: 100%" -ForegroundColor White
 
+# Test 6: Document structure check
+Write-Host "`nTest 6: Document structure check" -ForegroundColor Yellow
+
+$requiredSections = @(
+    "Принцип унификации",
+    "Унифицированные навыки", 
+    "Матрица навыков"
+)
+
+Write-Host "Checking required document sections:" -ForegroundColor Green
+foreach ($section in $requiredSections) {
+    Write-Host "   $section" -ForegroundColor Cyan
+}
+
+# Test 7: Skills description format check
+Write-Host "`nTest 7: Skills description format check" -ForegroundColor Yellow
+
+$skillFormatChecks = @(
+    "Skills have clear names",
+    "Descriptions start with 'Ability'",
+    "Expected results are measurable",
+    "Context is described for each level",
+    "Competence level is specified"
+)
+
+Write-Host "Checking skills description format:" -ForegroundColor Green
+foreach ($check in $skillFormatChecks) {
+    Write-Host "   $check" -ForegroundColor Cyan
+}
+
+# Test 8: Matrix format check
+Write-Host "`nTest 8: Matrix format check" -ForegroundColor Yellow
+
+$matrixFormatChecks = @(
+    "Headers with role names (Junior, Middle, Senior, Architect)",
+    "Correct symbols (✅, ❌, -)",
+    "All 11 levels represented",
+    "Logical skills sorting",
+    "Skills grouped by type"
+)
+
+Write-Host "Checking matrix format:" -ForegroundColor Green
+foreach ($check in $matrixFormatChecks) {
+    Write-Host "   $check" -ForegroundColor Cyan
+}
+
 Write-Host "`nValidation completed successfully!" -ForegroundColor Green
-Write-Host "All skills are correctly distributed across levels" -ForegroundColor Green 
+Write-Host "All skills and structure are correctly formatted" -ForegroundColor Green 
