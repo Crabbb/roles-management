@@ -22,9 +22,6 @@ roles-management/
 │   ├── all-analysts-skills-unified.md         # Все аналитики (детальная)
 │   ├── all-analysts-skills-unified-table.md   # Все аналитики (табличная)
 │   ├── all-analysts-skills-unified-export.csv # Все аналитики (CSV)
-│   ├── business-custdev-analyst-skills-unified.md
-│   ├── business-custdev-analyst-skills-unified-table.md
-│   ├── business-custdev-analyst-skills-unified-export.csv
 │   ├── developer-skills-unified.md
 │   ├── developer-skills-unified-table.md
 │   └── developer-skills-unified-export.csv

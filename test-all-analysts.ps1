@@ -11,10 +11,7 @@ $sourceFiles = @(
 $decomposedFiles = @(
     "decomposed/all-analysts-skills-unified.md",
     "decomposed/all-analysts-skills-unified-table.md",
-    "decomposed/all-analysts-skills-unified-export.csv",
-    "decomposed/business-custdev-analyst-skills-unified.md",
-    "decomposed/business-custdev-analyst-skills-unified-table.md",
-    "decomposed/business-custdev-analyst-skills-unified-export.csv"
+    "decomposed/all-analysts-skills-unified-export.csv"
 )
 
 Write-Host "Checking source files..." -ForegroundColor Yellow
