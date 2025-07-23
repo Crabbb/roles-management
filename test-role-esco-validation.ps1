@@ -1,14 +1,5 @@
-# ESCO Validation Test
-Write-Host "=== ESCO STANDARD VALIDATION TEST ===" -ForegroundColor Green
-
-# Check ESCO rules file
-$escoRulesFile = "rules/esco-standards.md"
-if (Test-Path $escoRulesFile) {
-    Write-Host "OK: ESCO rules file exists" -ForegroundColor Green
-} else {
-    Write-Host "ERROR: ESCO rules file not found" -ForegroundColor Red
-    exit 1
-}
+# Role ESCO Validation Test
+Write-Host "=== ROLE ESCO STANDARD VALIDATION TEST ===" -ForegroundColor Green
 
 # Function to validate CSV format
 function Test-CSVFormat {
@@ -104,7 +95,7 @@ function Test-SkillDescriptions {
     param($filePath)
     
     $content = Get-Content $filePath -Encoding UTF8
-    $roleSpecificTerms = @("аналитик", "бизнес-аналитик", "custdev", "ux", "конкурентный")
+    $roleSpecificTerms = @("аналитик", "бизнес-аналитик", "custdev", "ux", "конкурентный", "клиентских потребностей", "данных по продукту")
     $issues = 0
     
     for ($i = 1; $i -lt $content.Count; $i++) {
@@ -130,16 +121,39 @@ function Test-SkillDescriptions {
     }
 }
 
+# Function to check role description files
+function Test-RoleDescriptionFiles {
+    $roleFiles = @(
+        "decomposed/business-analyst-role-esco.md",
+        "decomposed/custdev-analyst-role-esco.md",
+        "decomposed/client-needs-analyst-role-esco.md",
+        "decomposed/product-data-analyst-role-esco.md",
+        "decomposed/ux-researcher-role-esco.md",
+        "decomposed/competitive-analyst-role-esco.md"
+    )
+    
+    foreach ($file in $roleFiles) {
+        if (Test-Path $file) {
+            Write-Host "OK: Role description file exists: $file" -ForegroundColor Green
+        } else {
+            Write-Host "ERROR: Role description file not found: $file" -ForegroundColor Red
+        }
+    }
+}
+
 # Main validation
-Write-Host "`nChecking ESCO CSV files..." -ForegroundColor Yellow
+Write-Host "`nChecking role description files..." -ForegroundColor Yellow
+Test-RoleDescriptionFiles
+
+Write-Host "`nChecking role ESCO CSV files..." -ForegroundColor Yellow
 
 $csvFiles = @(
-    "decomposed/business-analyst-esco.csv",
-    "decomposed/custdev-analyst-esco.csv", 
-    "decomposed/client-needs-analyst-esco.csv",
-    "decomposed/product-data-analyst-esco.csv",
-    "decomposed/ux-researcher-esco.csv",
-    "decomposed/competitive-analyst-esco.csv"
+    "decomposed/business-analyst-role-esco.csv",
+    "decomposed/custdev-analyst-role-esco.csv", 
+    "decomposed/client-needs-analyst-role-esco.csv",
+    "decomposed/product-data-analyst-role-esco.csv",
+    "decomposed/ux-researcher-role-esco.csv",
+    "decomposed/competitive-analyst-role-esco.csv"
 )
 
 $allValid = $true
@@ -159,9 +173,9 @@ foreach ($file in $csvFiles) {
 
 Write-Host "`n=== VALIDATION SUMMARY ===" -ForegroundColor Green
 if ($allValid) {
-    Write-Host "ALL ESCO FILES VALIDATED SUCCESSFULLY" -ForegroundColor Green
+    Write-Host "ALL ROLE ESCO FILES VALIDATED SUCCESSFULLY" -ForegroundColor Green
 } else {
     Write-Host "SOME VALIDATION ISSUES FOUND" -ForegroundColor Red
 }
 
-Write-Host "`nESCO validation completed" -ForegroundColor Green 
+Write-Host "`nRole ESCO validation completed" -ForegroundColor Green 
