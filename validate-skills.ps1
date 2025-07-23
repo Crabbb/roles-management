@@ -96,9 +96,9 @@ Write-Host "Level coverage: 100%" -ForegroundColor White
 Write-Host "`nTest 6: Document structure check" -ForegroundColor Yellow
 
 $requiredSections = @(
-    "Принцип унификации",
-    "Унифицированные навыки", 
-    "Матрица навыков"
+    "Principle of unification",
+    "Unified skills", 
+    "Skills matrix"
 )
 
 Write-Host "Checking required document sections:" -ForegroundColor Green
