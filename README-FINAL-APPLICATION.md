@@ -129,7 +129,7 @@ ALL SKILL MATRIX FORMATION RULES VALIDATED SUCCESSFULLY
 ### Основные файлы:
 - `rules/skill-matrix-formation.md` - детальное описание правила
 - `test-skill-matrix-formation.ps1` - тест валидации
-- `README-SKILL-MATRIX-RULE.md` - описание правила
+- `rules/skill-matrix-formation.md` - описание правила
 - `README-FINAL-APPLICATION.md` - данное описание
 
 ### Матрицы навыков:

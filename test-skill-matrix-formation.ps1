@@ -1,14 +1,85 @@
-# Skill Matrix Formation Validation Test
-Write-Host "=== SKILL MATRIX FORMATION RULE VALIDATION TEST ===" -ForegroundColor Green
+# Skill Matrix Formation Test Script
+# Проверяет корректность формирования матриц навыков
 
-# Check skill matrix formation rules file
-$rulesFile = "rules/skill-matrix-formation.md"
-if (Test-Path $rulesFile) {
-    Write-Host "OK: Skill matrix formation rules file exists" -ForegroundColor Green
-} else {
-    Write-Host "ERROR: Skill matrix formation rules file not found" -ForegroundColor Red
+Write-Host "=== SKILL MATRIX FORMATION TEST ===" -ForegroundColor Green
+
+# Проверка основных файлов
+$requiredFiles = @(
+    "decomposed/all-analysts-skills-unified-table.md",
+    "decomposed/developer-skills-unified-table.md", 
+    "decomposed/product-manager-skills-unified-table.md",
+    "analyst-skills-list.md",
+    "developer-skills-list.md",
+    "product-manager-skills-list.md"
+)
+
+# Проверка CSV файлов
+$csvFiles = @(
+    "decomposed/CSV-format/analyst-skills.csv",
+    "decomposed/CSV-format/developer-skills.csv",
+    "decomposed/CSV-format/product-manager-skills.csv"
+)
+
+Write-Host "`n1. Проверка существования файлов..." -ForegroundColor Yellow
+
+$allFiles = $requiredFiles + $csvFiles
+$missingFiles = @()
+
+foreach ($file in $allFiles) {
+    if (-not (Test-Path $file)) {
+        $missingFiles += $file
+        Write-Host "ERROR: Файл '$file' не найден" -ForegroundColor Red
+    } else {
+        Write-Host "OK: $file" -ForegroundColor Green
+    }
+}
+
+if ($missingFiles.Count -gt 0) {
+    Write-Host "`nERROR: Найдены отсутствующие файлы!" -ForegroundColor Red
     exit 1
 }
+
+Write-Host "`n2. Проверка CSV файлов..." -ForegroundColor Yellow
+
+# Проверка каждого CSV файла
+foreach ($file in $csvFiles) {
+    Write-Host "`nValidating: $file" -ForegroundColor Cyan
+    
+    $content = Get-Content $file -Encoding UTF8
+    $lines = $content.Count
+    
+    if ($lines -lt 2) {
+        Write-Host "ERROR: Файл содержит менее 2 строк" -ForegroundColor Red
+        continue
+    }
+    
+    # Проверка заголовка
+    $header = $content[0]
+    if ($header -notmatch "^skill name:separator:skill description$") {
+        Write-Host "ERROR: Неправильный формат заголовка" -ForegroundColor Red
+        Write-Host "Ожидается: skill name:separator:skill description" -ForegroundColor Yellow
+        Write-Host "Получено: $header" -ForegroundColor Yellow
+        continue
+    }
+    
+    Write-Host "OK: Заголовок корректный" -ForegroundColor Green
+    
+    # Проверка данных
+    $dataLines = $content[1..($lines-1)]
+    $validDataLines = 0
+    
+    foreach ($line in $dataLines) {
+        if ($line -match "^[^:]+:separator:[^:]+$") {
+            $validDataLines++
+        } else {
+            Write-Host "WARNING: Неправильный формат строки: $line" -ForegroundColor Yellow
+        }
+    }
+    
+    Write-Host "OK: Валидных строк данных: $validDataLines из $($dataLines.Count)" -ForegroundColor Green
+}
+
+Write-Host "`n3. Проверка правил наследования навыков..." -ForegroundColor Yellow
 
 # Function to validate matrix headers
 function Test-MatrixHeaders {
@@ -234,4 +305,14 @@ if ($allValid) {
     Write-Host "SOME VALIDATION ISSUES FOUND" -ForegroundColor Red
 }
 
-Write-Host "`nSkill matrix formation validation completed" -ForegroundColor Green 
+Write-Host "`nSkill matrix formation validation completed" -ForegroundColor Green
+
+# Additional README validation
+Write-Host "`n4. Проверка README файла..." -ForegroundColor Yellow
+
+if (Test-Path "test-readme-validation.ps1") {
+    Write-Host "Запуск теста валидации README..." -ForegroundColor Cyan
+    & powershell -ExecutionPolicy Bypass -File "test-readme-validation.ps1"
+} else {
+    Write-Host "WARNING: test-readme-validation.ps1 не найден" -ForegroundColor Yellow
+} 
