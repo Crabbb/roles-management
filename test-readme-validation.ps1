@@ -20,32 +20,32 @@ $contentText = $content -join "`n"
 Write-Host "`n2. Проверка версии..." -ForegroundColor Yellow
 
 # Проверка версии
-if ($contentText -match "Версия.*4\.2") {
-    Write-Host "OK: Версия 4.2 указана" -ForegroundColor Green
+if ($contentText -match "Версия.*4\.3") {
+    Write-Host "OK: Версия 4.3 указана" -ForegroundColor Green
 } else {
     Write-Host "WARNING: Версия может быть не обновлена" -ForegroundColor Yellow
 }
 
-Write-Host "`n3. Проверка упоминания навыков разработчиков..." -ForegroundColor Yellow
+Write-Host "`n3. Проверка упоминания навыков продукт-менеджера..." -ForegroundColor Yellow
 
-# Проверка упоминания новых навыков разработчиков
-$developerSkills = @(
-    "серверный код",
-    "API",
-    "базы данных", 
-    "микросервисы",
-    "контейнеризация",
-    "CI/CD",
-    "клиентский код",
-    "SPA",
-    "HTML/CSS",
-    "UX/UI",
-    "PWA",
-    "микрофронтенды"
+# Проверка упоминания новых навыков продукт-менеджера
+$productManagerSkills = @(
+    "маркетинговые исследования",
+    "конкурентов",
+    "интервью с пользователями",
+    "ключевые показатели эффективности",
+    "пользовательские истории",
+    "продуктовым бэклогом",
+    "приоритизировать требования",
+    "минимально жизнеспособный продукт",
+    "кросс‑функциональные команды",
+    "требования клиентов",
+    "результаты исследований",
+    "метрики продукта"
 )
 
 $foundSkills = 0
-foreach ($skill in $developerSkills) {
+foreach ($skill in $productManagerSkills) {
     if ($contentText -match $skill) {
         $foundSkills++
         Write-Host "OK: Найден навык '$skill'" -ForegroundColor Green
@@ -54,13 +54,13 @@ foreach ($skill in $developerSkills) {
     }
 }
 
-Write-Host "`nНайдено навыков разработчиков: $foundSkills из $($developerSkills.Count)" -ForegroundColor Cyan
+Write-Host "`nНайдено навыков продукт-менеджера: $foundSkills из $($productManagerSkills.Count)" -ForegroundColor Cyan
 
 Write-Host "`n4. Проверка статистики..." -ForegroundColor Yellow
 
 # Проверка статистики
-if ($contentText -match "120\+") {
-    Write-Host "OK: Статистика обновлена (120+ навыков)" -ForegroundColor Green
+if ($contentText -match "130\+") {
+    Write-Host "OK: Статистика обновлена (130+ навыков)" -ForegroundColor Green
 } else {
     Write-Host "WARNING: Статистика может быть не обновлена" -ForegroundColor Yellow
 }
@@ -68,19 +68,19 @@ if ($contentText -match "120\+") {
 Write-Host "`n5. Проверка упоминания обновлений..." -ForegroundColor Yellow
 
 # Проверка упоминания обновлений
-if ($contentText -match "обновлены навыки разработчиков") {
+if ($contentText -match "обновлены навыки") {
     Write-Host "OK: Упоминание обновлений найдено" -ForegroundColor Green
 } else {
-    Write-Host "WARNING: Нет упоминания обновлений навыков разработчиков" -ForegroundColor Yellow
+    Write-Host "WARNING: Нет упоминания обновлений навыков" -ForegroundColor Yellow
 }
 
 Write-Host "`n6. Проверка структуры проекта..." -ForegroundColor Yellow
 
 # Проверка упоминания ключевых файлов
 $keyFiles = @(
-    "developer-skills-unified-table.md",
-    "developer-skills-list.md",
-    "developer-skills.csv"
+    "product-manager-skills-unified-table.md",
+    "product-manager-skills-list.md",
+    "product-manager-skills.csv"
 )
 
 foreach ($file in $keyFiles) {
@@ -95,14 +95,14 @@ Write-Host "`n=== РЕЗУЛЬТАТ ПРОВЕРКИ ===" -ForegroundColor Cyan
 
 if ($foundSkills -ge 8) {
     Write-Host "✅ README обновлен корректно" -ForegroundColor Green
-    Write-Host "Найдено $foundSkills из $($developerSkills.Count) навыков разработчиков" -ForegroundColor Green
+    Write-Host "Найдено $foundSkills из $($productManagerSkills.Count) навыков продукт-менеджера" -ForegroundColor Green
 } else {
     Write-Host "⚠️ README может требовать дополнительных обновлений" -ForegroundColor Yellow
-    Write-Host "Найдено только $foundSkills из $($developerSkills.Count) навыков разработчиков" -ForegroundColor Yellow
+    Write-Host "Найдено только $foundSkills из $($productManagerSkills.Count) навыков продукт-менеджера" -ForegroundColor Yellow
 }
 
 Write-Host "`nРекомендации:" -ForegroundColor Cyan
-Write-Host "- Убедитесь, что все новые навыки разработчиков упомянуты в README" -ForegroundColor White
+Write-Host "- Убедитесь, что все новые навыки продукт-менеджера упомянуты в README" -ForegroundColor White
 Write-Host "- Проверьте актуальность статистики" -ForegroundColor White
 Write-Host "- Обновите версию при необходимости" -ForegroundColor White
 

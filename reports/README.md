@@ -11,6 +11,7 @@
 - `CSV-IMPLEMENTATION-REPORT.md` - Отчет о реализации CSV файлов
 - `README-UPDATE-REPORT.md` - Отчет об обновлении README и добавлении валидации
 - `CSV-FOLDER-FIX-REPORT.md` - Отчет об исправлении проблемы с папкой CSV
+- `PRODUCT-MANAGER-SKILLS-UPDATE-REPORT.md` - Отчет об обновлении навыков продукт-менеджера
 
 ---
 
